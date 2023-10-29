@@ -70,7 +70,7 @@ export default function AddCompetition() {
     };
 
     const checkNumber = (_: any, value: number) => {
-        if (/^\d+$/.test(value.toString())) {
+        if (/^\d+(,\d+)?$/.test(value.toString())) {
             return Promise.resolve();
         }
         return Promise.reject(new Error('Mora biti broj!'));
