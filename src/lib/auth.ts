@@ -50,14 +50,14 @@ export async function loginIsRequiredServer() {
 export function loginIsRequiredClient() {
     if (typeof window !== "undefined") {
         const session = useSession();
+        console.log("session ", session)
         const router = useRouter();
-        if (!session) router.push("/");
+        if (!session.data) router.push("/");
     }
 }
 
-
 export function isLoggedIn() {
     const session = useSession()
-    if (!session) return false
+    if (!session.data) return false
     return true
 }
