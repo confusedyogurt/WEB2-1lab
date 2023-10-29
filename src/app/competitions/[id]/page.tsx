@@ -1,6 +1,7 @@
 import { PrismaClient, competition, Prisma } from '@prisma/client';
 import type { ColumnsType } from 'antd/es/table';
 import { Space, Table, Tag } from 'antd';
+import { isLoggedIn } from "@/lib/auth";
 
 const prisma = new PrismaClient();
 import React from 'react'
@@ -84,23 +85,25 @@ export default async function Competition({ params }: { params: { id: string } }
   if (!competition) notFound()
 
   return (
-    <div style={cardStyle}>
-      <div style={formContainerStyle}>
-        <h2 style={competitionNameStyle}>Natjecanje: {competition.name}</h2>
-        <h2 style={scoringSystemStyle}>Sustav bodovanja: {competition.scoringsystem}</h2>
-        {competition.round.map((round: any, roundIndex: any) => (
-          <div key={roundIndex}>
-            <h3 style={roundNameStyle}>{round.name}</h3>
-            <Table
-              pagination={false}
-              columns={columns}
-              dataSource={round.match.map((match: any, index: any) => ({
-                ...match,
-                key: index,
-              }))}
-            />
-          </div>
-        ))}
+    <div>
+      <div style={cardStyle}>
+        <div style={formContainerStyle}>
+          <h2 style={competitionNameStyle}>Natjecanje: {competition.name}</h2>
+          <h2 style={scoringSystemStyle}>Sustav bodovanja: {competition.scoringsystem}</h2>
+          {competition.round.map((round: any, roundIndex: any) => (
+            <div key={roundIndex}>
+              <h3 style={roundNameStyle}>{round.name}</h3>
+              <Table
+                pagination={false}
+                columns={columns}
+                dataSource={round.match.map((match: any, index: any) => ({
+                  ...match,
+                  key: index,
+                }))}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -2,6 +2,10 @@
 import { useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import { useRouter } from 'next/navigation'
+import { getServerSession } from "next-auth";
+import { NavBar } from './../../components/navbar';
+
+import { authConfig, loginIsRequiredClient, loginIsRequiredServer, isLoggedIn } from "@/lib/auth";
 
 type FieldType = {
     name?: string;
@@ -42,6 +46,8 @@ const subheaderStyle = {
 };
 
 export default function AddCompetition() {
+    loginIsRequiredClient();
+
     const router = useRouter()
     const [loading, setLoading] = useState(false);
 
@@ -84,64 +90,67 @@ export default function AddCompetition() {
     };
 
     return (
-        <div style={cardStyle}>
-            <div style={formContainerStyle}>
-                <div style={titleStyle}>Dodaj natjecanje</div>
-                <Form
-                    name="basic"
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 16 }}
-                    initialValues={{ remember: true }}
-                    onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
-                    autoComplete="off"
-                >
-                    <Form.Item<FieldType>
-                        label="Ime natjecanja"
-                        name="name"
-                        rules={[{ required: true, message: 'Unesite ime natjecanja!' }]}
+        <div>
+            <NavBar />
+            <div style={cardStyle}>
+                <div style={formContainerStyle}>
+                    <div style={titleStyle}>Dodaj natjecanje</div>
+                    <Form
+                        name="basic"
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 16 }}
+                        initialValues={{ remember: true }}
+                        onFinish={onFinish}
+                        onFinishFailed={onFinishFailed}
+                        autoComplete="off"
                     >
-                        <Input />
-                    </Form.Item>
+                        <Form.Item<FieldType>
+                            label="Ime natjecanja"
+                            name="name"
+                            rules={[{ required: true, message: 'Unesite ime natjecanja!' }]}
+                        >
+                            <Input />
+                        </Form.Item>
 
-                    <Form.Item<FieldType>
-                        label="Natjecatelji"
-                        name="competitors"
-                        rules={[{ required: true, message: 'Unesite 4-8 natjecatelja odvojenih s ;', validator: checkCompetitors }]}
-                    >
-                        <Input />
-                    </Form.Item>
+                        <Form.Item<FieldType>
+                            label="Natjecatelji"
+                            name="competitors"
+                            rules={[{ required: true, message: 'Unesite 4-8 natjecatelja odvojenih s ;', validator: checkCompetitors }]}
+                        >
+                            <Input />
+                        </Form.Item>
 
-                    <div style={subheaderStyle}>Sustav bodovanja</div>
+                        <div style={subheaderStyle}>Sustav bodovanja</div>
 
-                    <Form.Item<FieldType>
-                        label="Pobjeda"
-                        name="win"
-                        rules={[{ required: true, message: 'Unesite broj', validator: checkNumber }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item<FieldType>
-                        label="Remi"
-                        name="remi"
-                        rules={[{ required: true, message: 'Unesite broj', validator: checkNumber }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item<FieldType>
-                        label="Poraz"
-                        name="defeat"
-                        rules={[{ required: true, message: 'Unesite broj', validator: checkNumber }]}
-                    >
-                        <Input />
-                    </Form.Item>
+                        <Form.Item<FieldType>
+                            label="Pobjeda"
+                            name="win"
+                            rules={[{ required: true, message: 'Unesite broj', validator: checkNumber }]}
+                        >
+                            <Input />
+                        </Form.Item>
+                        <Form.Item<FieldType>
+                            label="Remi"
+                            name="remi"
+                            rules={[{ required: true, message: 'Unesite broj', validator: checkNumber }]}
+                        >
+                            <Input />
+                        </Form.Item>
+                        <Form.Item<FieldType>
+                            label="Poraz"
+                            name="defeat"
+                            rules={[{ required: true, message: 'Unesite broj', validator: checkNumber }]}
+                        >
+                            <Input />
+                        </Form.Item>
 
-                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button type="primary" htmlType="submit" loading={loading}>
-                            Dodaj
-                        </Button>
-                    </Form.Item>
-                </Form>
+                        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                            <Button type="primary" htmlType="submit" loading={loading}>
+                                Dodaj
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </div>
             </div>
         </div>
     );
